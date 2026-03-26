@@ -1,0 +1,22 @@
+{
+  "name": "harness-engineering-template",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Enterprise-grade harness template for agent-driven web projects",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "setup": "npm install",
+    "dev": "npm run dev --workspace @harness/api & npm run dev --workspace @harness/web",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "check": "npm run lint && npm run test && npm run build"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}
