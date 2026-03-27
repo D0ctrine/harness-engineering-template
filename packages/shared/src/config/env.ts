@@ -5,6 +5,8 @@ export interface BaseRuntimeConfig {
 
 export interface WebRuntimeConfig extends BaseRuntimeConfig {
   appName: string;
+  appShortName: string;
+  appDescription: string;
   apiBaseUrl: string;
 }
 
@@ -27,7 +29,11 @@ export const getWebRuntimeConfig = (env: NodeJS.ProcessEnv): WebRuntimeConfig =>
   nodeEnv: env.NODE_ENV ?? "development",
   logLevel: env.LOG_LEVEL ?? "info",
   appName: env.NEXT_PUBLIC_APP_NAME ?? "Harness Engineering Template",
-  apiBaseUrl: must(env.NEXT_PUBLIC_API_BASE_URL, "NEXT_PUBLIC_API_BASE_URL")
+  appShortName: env.NEXT_PUBLIC_APP_SHORT_NAME ?? "Harness",
+  appDescription:
+    env.NEXT_PUBLIC_APP_DESCRIPTION ??
+    "Reusable enterprise harness for installable web and app-shell delivery.",
+  apiBaseUrl: env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000/api"
 });
 
 export const getApiRuntimeConfig = (env: NodeJS.ProcessEnv): ApiRuntimeConfig => ({

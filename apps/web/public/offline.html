@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>Offline | Harness</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f4efe4;
+        --surface: rgba(255, 255, 255, 0.9);
+        --ink: #17232a;
+        --muted: #536067;
+        --accent: #0f7668;
+        --border: rgba(23, 35, 42, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background:
+          radial-gradient(circle at top left, rgba(239, 180, 81, 0.18), transparent 36%),
+          linear-gradient(180deg, #f8f4ea 0%, var(--bg) 100%);
+        color: var(--ink);
+        font-family:
+          "Iowan Old Style",
+          "Palatino Linotype",
+          "Book Antiqua",
+          Palatino,
+          Georgia,
+          serif;
+      }
+
+      main {
+        width: min(480px, 100%);
+        padding: 28px;
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        background: var(--surface);
+        box-shadow: 0 20px 48px rgba(23, 35, 42, 0.08);
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: clamp(2rem, 9vw, 3rem);
+        line-height: 1.05;
+      }
+
+      p {
+        margin: 0 0 18px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      a,
+      button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0 16px;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        text-decoration: none;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .primary {
+        background: var(--accent);
+        color: #f7fbfa;
+      }
+
+      .secondary {
+        background: rgba(255, 255, 255, 0.8);
+        color: var(--ink);
+        border-color: var(--border);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>You are offline.</h1>
+      <p>
+        The installable shell is still available, but this navigation request could not reach the
+        network. Reconnect and try again, or return to a cached route.
+      </p>
+      <div class="actions">
+        <button class="primary" type="button" onclick="window.location.reload()">
+          Retry
+        </button>
+        <a class="secondary" href="/app">Open app shell</a>
+        <a class="secondary" href="/">Back to landing</a>
+      </div>
+    </main>
+  </body>
+</html>
