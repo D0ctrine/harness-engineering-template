@@ -18,14 +18,14 @@ export const InstallHint = ({
   if (hasUpdate) {
     return (
       <aside className="pwa-banner" aria-live="polite">
-        <h2>App shell update ready</h2>
-        <p>Refresh the page or reopen the installed app to load the latest shell assets.</p>
+        <h2>앱 화면 업데이트 준비됨</h2>
+        <p>최신 화면 자산을 불러오려면 페이지를 새로고침하거나 설치된 앱을 다시 열어 주세요.</p>
         <div className="pwa-banner__actions">
           <button className="button-primary" onClick={() => window.location.reload()} type="button">
-            Refresh now
+            지금 새로고침
           </button>
           <button className="button-secondary" onClick={onDismiss} type="button">
-            Later
+            나중에
           </button>
         </div>
       </aside>
@@ -39,17 +39,16 @@ export const InstallHint = ({
   if (installState.isInstallable) {
     return (
       <aside className="pwa-banner" aria-live="polite">
-        <h2>Install the app shell</h2>
+        <h2>앱 설치하기</h2>
         <p>
-          Add this workspace to the home screen so users land directly in <code>/app</code> with a
-          standalone shell.
+          홈 화면에 추가하면 브라우저 없이 <code>/app</code>으로 바로 들어갈 수 있습니다.
         </p>
         <div className="pwa-banner__actions">
           <button className="button-primary" onClick={() => void onInstall()} type="button">
-            Install app
+            앱 설치
           </button>
           <button className="button-secondary" onClick={onDismiss} type="button">
-            Dismiss
+            닫기
           </button>
         </div>
       </aside>
@@ -59,14 +58,14 @@ export const InstallHint = ({
   if (installState.isIos) {
     return (
       <aside className="pwa-banner" aria-live="polite">
-        <h2>Add to Home Screen</h2>
+        <h2>홈 화면에 추가</h2>
         <p>
-          In Safari, open the share sheet and choose <strong>Add to Home Screen</strong> to launch
-          the workspace in standalone mode.
+          Safari에서 공유 메뉴를 연 뒤 <strong>홈 화면에 추가</strong>를 선택하면 앱처럼 실행할
+          수 있습니다.
         </p>
         <div className="pwa-banner__actions">
           <button className="button-secondary" onClick={onDismiss} type="button">
-            Hide hint
+            안내 숨기기
           </button>
         </div>
       </aside>

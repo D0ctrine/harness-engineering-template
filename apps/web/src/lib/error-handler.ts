@@ -9,12 +9,12 @@ export const mapApiErrorToUserMessage = (error: unknown): UserFacingError => {
   const typed = error as ApiError;
 
   if (typed?.status === 404) {
-    return { title: "Not found", message: "Requested resource was not found." };
+    return { title: "항목을 찾을 수 없어요", message: "요청한 내용을 찾지 못했습니다." };
   }
 
   if (typed?.status && typed.status >= 500) {
-    return { title: "Service unavailable", message: "Please try again in a moment." };
+    return { title: "서비스를 불러오지 못했어요", message: "잠시 후 다시 시도해 주세요." };
   }
 
-  return { title: "Unexpected error", message: "Something went wrong while loading data." };
+  return { title: "예상하지 못한 오류", message: "데이터를 불러오는 중 문제가 발생했습니다." };
 };

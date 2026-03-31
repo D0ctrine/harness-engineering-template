@@ -11,6 +11,13 @@
     "isolatedModules": true,
     "baseUrl": ".",
     "paths": {
+      "@harness/application": ["packages/application/src/index.ts"],
+      "@harness/application/*": ["packages/application/src/*"],
+      "@harness/domain": ["packages/domain/src/index.ts"],
+      "@harness/domain/*": ["packages/domain/src/*"],
+      "@harness/infrastructure": ["packages/infrastructure/src/index.ts"],
+      "@harness/infrastructure/*": ["packages/infrastructure/src/*"],
+      "@harness/shared": ["packages/shared/src/index.ts"],
       "@harness/shared/*": ["packages/shared/src/*"]
     }
   }

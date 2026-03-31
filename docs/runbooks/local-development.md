@@ -1,36 +1,90 @@
 # Local Development Runbook
 
 ## Setup
+
 1. `cp .env.sample .env`
 2. Fill required secrets and URLs.
 3. `npm run setup`
 
-## Start stack
+## Runtime Targets
+
+- frontend on Cloudflare Pages
+- API on Cloudflare Workers
+- pure serverless runtime
+- no Express runtime
+- no Express adapter
+
+Local API development uses a thin Node bridge that calls the same handler-first Worker entrypoint used for deployment.
+The deployed backend target remains Cloudflare Workers.
+
+## Start Stack
+
+- `npm run dev --workspace @harness/web`
+- `npm run dev --workspace @harness/api`
 - `npm run dev`
-- Web development uses `apps/web/.next-dev` so it does not collide with production build artifacts in `apps/web/.next`.
+
+Notes:
+- `npm run dev` starts both web and API together
+- root `.env` is loaded for local API execution
+- web development uses `apps/web/.next-dev` so it does not collide with production build artifacts in `apps/web/.next`
+- the API health endpoint is `http://localhost:4000/api/health`
+- scripture lookup uses `SCRIPTURE_ASSET_BASE_URL` in local development and Cloudflare `ASSETS` binding in the deployed Worker
 
 ## Validation
+
 - `npm run lint`
 - `npm run test`
 - `npm run build`
 - `npm run check`
+- `npm run capture:ui`
+- `curl http://localhost:4000/api/health`
+- `curl http://localhost:4000/api/reading/home`
+- `curl http://localhost:4000/api/notes/workspace`
+- `curl http://localhost:4000/api/reflection/home`
+- `curl http://localhost:4000/api/community/preview`
+- `curl -X OPTIONS http://localhost:4000/api/health -H 'Origin: http://localhost:3000' -i`
+- `npx wrangler deploy --config apps/api/wrangler.jsonc --dry-run --outdir .wrangler-dryrun`
 
-## PWA validation
+## API Validation
+
+1. Start the API with `npm run dev --workspace @harness/api`.
+2. Confirm `GET /api/health` returns `200` with a JSON status payload.
+3. Confirm `GET /api/reading/home` returns the preloaded reading home payload.
+4. Confirm `GET /api/notes/workspace` returns the note workspace payload.
+5. Confirm `GET /api/reflection/home` returns the reflection payload.
+6. Confirm `GET /api/community/preview` returns the group preview payload.
+7. Confirm `OPTIONS /api/health` returns `204` with CORS headers.
+8. Confirm `GET /health` returns `404` because the API prefix is `/api`.
+9. Confirm the runtime path does not require Express.
+
+## PWA Validation
+
 1. Open `http://localhost:3000/` and verify the browser landing route loads.
-2. Open `http://localhost:3000/app` and verify the app shell renders with the health card.
+2. Open `http://localhost:3000/app` and verify the app shell renders.
 3. In browser DevTools, confirm the manifest is detected and `start_url` points to `/app`.
 4. Use the Application tab to inspect the registered service worker and installed icons.
-5. Switch DevTools to offline mode, reload a route, and confirm the offline fallback page is served for uncached navigation.
-6. Run service worker install/offline checks against `next start`, not `next dev`; the local development server now unregisters PWA workers on purpose to avoid stale `_next` chunk runtime errors.
+5. Run install and offline checks against `next start`, not `next dev`.
+6. Confirm the offline fallback page is served for uncached navigation in the production-style web runtime.
 
-## Service worker reset
+## UI Capture
+
+1. Start the API runtime.
+2. Start the web runtime with `PORT=3001 npm run start --workspace @harness/web`.
+3. Run `npm run capture:ui`.
+4. Review the generated screenshots under `artifacts/ui-captures`.
+
+## Service Worker Reset
+
 - In browser DevTools Application tab, unregister the service worker.
 - Clear the `harness-static-v1` and `harness-pages-v1` caches before retesting shell updates.
 - Hard refresh after updating `public/sw.js` to confirm the new worker activates.
 - If you see `__webpack_modules__[moduleId] is not a function` while using `next dev`, reload once after the localhost worker unregisters or manually clear Application storage.
 
 ## Troubleshooting
+
 - Port conflicts: update `API_PORT` and `NEXT_PUBLIC_API_BASE_URL` together.
-- Missing env vars: verify `.env` values against `.env.sample`.
+- Missing env vars: verify root `.env` values against `.env.sample`.
+- CORS mismatch: verify `CORS_ORIGIN` matches the web origin used in development.
 - Missing install prompt: Chromium exposes it only when the manifest and service worker are both valid and the app meets installability checks.
-- `Cannot find module './<id>.js'` or `__webpack_modules__[moduleId] is not a function`: stop the web server, restart `npm run dev`, and ensure old localhost site data is cleared. Dev and production builds now use separate Next output folders to avoid chunk collisions.
+- `Cannot find module './<id>.js'` or `__webpack_modules__[moduleId] is not a function`: stop the web server, restart `npm run dev`, and ensure old localhost site data is cleared.
+- Worker dry run errors: re-run `npx wrangler deploy --config apps/api/wrangler.jsonc --dry-run --outdir .wrangler-dryrun` and inspect the bundle failure before changing runtime code.

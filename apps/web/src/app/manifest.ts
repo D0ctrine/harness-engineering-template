@@ -15,6 +15,11 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#0f7668",
     icons: [
       {
+        src: "/icons/juyaro-mark.svg",
+        sizes: "any",
+        type: "image/svg+xml"
+      },
+      {
         src: "/icons/icon-192x192.png",
         sizes: "192x192",
         type: "image/png"
@@ -33,16 +38,28 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
     shortcuts: [
       {
-        name: "Open app shell",
-        short_name: "App",
-        description: "Jump directly into the installed workspace shell.",
-        url: "/app"
+        name: "오늘의 큐티",
+        short_name: "읽기",
+        description: "설치된 앱 화면에서 오늘의 읽기 홈을 바로 엽니다.",
+        url: "/app#today-reading"
       },
       {
-        name: "System health",
-        short_name: "Health",
-        description: "Open the health module card in the app shell.",
-        url: "/app#system-health"
+        name: "묵상 단계",
+        short_name: "묵상",
+        description: "읽기 흐름 안의 묵상 섹션으로 바로 이동합니다.",
+        url: "/app#reflection-step"
+      },
+      {
+        name: "메모 쓰기",
+        short_name: "메모",
+        description: "앱 화면 안의 메모 작업 영역을 바로 엽니다.",
+        url: "/app#note-workspace"
+      },
+      {
+        name: "앱 홈 열기",
+        short_name: "홈",
+        description: "설치형 읽기 워크스페이스 홈을 엽니다.",
+        url: "/app"
       }
     ]
   };

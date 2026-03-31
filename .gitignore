@@ -3,6 +3,10 @@ node_modules
 .next-dev
 dist
 coverage
+artifacts/
+.wrangler-dryrun/
+apps/api/.wrangler-dryrun/
+apps/api/apps/
 .env
 .env.local
 .DS_Store

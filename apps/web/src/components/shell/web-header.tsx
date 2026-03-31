@@ -6,14 +6,21 @@ export const WebHeader = () => {
     <header className="web-header">
       <div className="page-wrap web-header__inner">
         <Link className="web-header__brand" href="/">
-          <span className="web-header__mark">H</span>
+          <img
+            className="web-header__mark"
+            src="/icons/juyaro-mark.svg"
+            alt=""
+            aria-hidden="true"
+            width="44"
+            height="44"
+          />
           <span>{runtimeConfig.appShortName}</span>
         </Link>
 
         <nav className="web-header__nav" aria-label="Primary">
-          <Link href="#structure">Structure</Link>
-          <Link href="#install">Install</Link>
-          <Link href="/app">App shell</Link>
+          <Link href="#experience">소개</Link>
+          <Link href="#install">설치</Link>
+          <Link href="/app">오늘의 큐티</Link>
         </nav>
       </div>
     </header>

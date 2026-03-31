@@ -1,6 +1,1 @@
-export interface HealthStatus {
-  status: "ok" | "degraded";
-  service: string;
-  timestamp: string;
-  version: string;
-}
+export type { HealthStatus } from "@harness/domain";

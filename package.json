@@ -13,10 +13,15 @@
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
-    "check": "npm run lint && npm run test && npm run build"
+    "check": "npm run lint && npm run test && npm run build",
+    "capture:ui": "node scripts/capture-ui.mjs",
+    "import:scripture": "node scripts/import-scripture-assets.mjs"
   },
   "engines": {
     "node": ">=20.0.0",
     "npm": ">=10.0.0"
+  },
+  "devDependencies": {
+    "playwright": "1.55.1"
   }
 }

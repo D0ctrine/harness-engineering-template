@@ -9,10 +9,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
   return (
     <AppShell
       currentSection={{
-        key: "overview",
-        title: "Installed workspace",
+        key: "read",
+        title: "오늘의 큐티",
         description:
-          "A mobile-friendly shell for dashboards, internal modules, and agent-delivered workflows."
+          "오늘의 말씀을 읽고, 메모를 남긴 뒤 묵상과 나눔으로 자연스럽게 이어가세요."
       }}
     >
       {children}

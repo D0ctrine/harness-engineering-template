@@ -1,21 +1,33 @@
 # Monorepo Architecture
 
 ## Structure
-- `apps/web`: Next.js app with browser landing route, installed app shell route, feature modules, and PWA platform layer.
-- `apps/api`: Express app with route -> controller -> service -> repository -> model.
-- `packages/shared`: runtime config, API client, and cross-app types.
 
-## Dependency direction
-- `apps/*` may depend on `packages/shared`.
-- `packages/shared` depends on no app package.
+- `apps/web` — PWA frontend application
+- `apps/api` — serverless API handlers
+- `packages/domain` — domain entities and domain rules
+- `packages/application` — use-cases, services, and orchestration logic
+- `packages/infrastructure` — persistence, storage, provider integrations, and runtime adapters that do not introduce Express
+- `packages/shared` — shared types, config utilities, and cross-package helpers
 
-## Boundary enforcement principles
-- Controllers never perform persistence operations directly.
-- UI components never perform remote requests directly.
-- Shared types represent contracts between frontend and backend.
+## Dependency Direction
 
-## Web application responsibilities
-- `/` is the browser-first landing route for onboarding, product framing, and install entry.
-- `/app` is the PWA start URL and renders the standalone workspace shell.
-- `src/features/*` owns business modules and preserves component -> hook -> service flow.
-- `src/platform/pwa/*` owns manifest, install prompts, standalone detection, and service worker registration.
+- `apps/web` may depend on `packages/shared`
+- `apps/api` may depend on `packages/domain`, `packages/application`, `packages/infrastructure`, and `packages/shared`
+- `packages/application` may depend on `packages/domain`
+- `packages/infrastructure` may depend on `packages/domain`, `packages/application`, and `packages/shared`
+- `packages/shared` depends on no app package
+
+## Deployment Model
+
+- `apps/web` is deployed on Cloudflare Pages
+- `apps/api` is deployed on Cloudflare Workers
+- `packages/*` are shared internal libraries
+
+## Architecture Notes
+
+- `apps/api` must not depend on Express
+- `apps/api` should expose handler-based endpoints for a serverless runtime
+- `apps/web` owns the PWA frontend experience and consumes serverless API endpoints
+- repo structure is designed to keep cost low and module boundaries clear
+- business logic should be implemented in `packages/application`, not inside handlers
+- infrastructure code should remain compatible with stateless execution and edge/serverless deployment

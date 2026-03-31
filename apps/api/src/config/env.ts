@@ -1,4 +1,9 @@
-import "dotenv/config";
-import { getApiRuntimeConfig } from "@harness/shared";
+import type { RuntimeEnvironment } from "@harness/shared";
 
-export const apiConfig = getApiRuntimeConfig(process.env);
+export interface AssetBinding {
+  fetch: (request: Request | URL | string, init?: RequestInit) => Promise<Response>;
+}
+
+export interface ApiBindings extends RuntimeEnvironment {
+  ASSETS?: AssetBinding;
+}

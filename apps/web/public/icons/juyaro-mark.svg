@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <defs>
+    <filter id="juyaro-shadow" x="0" y="0" width="256" height="256" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.18" />
+    </filter>
+    <linearGradient id="juyaro-surface" x1="40" y1="32" x2="216" y2="224" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fffefb" />
+      <stop offset="1" stop-color="#f8f1e4" />
+    </linearGradient>
+  </defs>
+  <g filter="url(#juyaro-shadow)">
+    <rect x="18" y="18" width="220" height="220" rx="52" fill="url(#juyaro-surface)" />
+  </g>
+  <g stroke="#10262b" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M128 189c-11-13-27-20-49-20H66c-14 0-26-11-26-25V87c0-14 12-25 26-25h10c23 0 40 5 52 16" />
+    <path d="M128 189c11-13 27-20 49-20h13c14 0 26-11 26-25V87c0-14-12-25-26-25h-10c-23 0-40 5-52 16" />
+    <path d="M128 66v90" />
+    <path d="M104 94h48" />
+    <path d="M67 84c17-6 33-6 48 0" />
+    <path d="M64 103c19-6 36-6 51 0" />
+    <path d="M64 122c19-6 36-6 51 0" />
+    <path d="M64 141c19-6 36-6 51 0" />
+    <path d="M141 84c17-6 33-6 48 0" />
+    <path d="M141 103c19-6 36-6 51 0" />
+    <path d="M141 122c19-6 36-6 51 0" />
+    <path d="M141 141c19-6 36-6 51 0" />
+  </g>
+  <circle cx="205" cy="196" r="7" fill="#10262b" />
+</svg>

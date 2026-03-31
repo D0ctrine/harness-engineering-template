@@ -8,7 +8,7 @@ export const HealthPanel = () => {
   if (isLoading) {
     return (
       <section className="loading-card">
-        <p>Loading health status from the API service layer.</p>
+        <p>시스템 상태를 불러오는 중입니다.</p>
       </section>
     );
   }
@@ -16,7 +16,7 @@ export const HealthPanel = () => {
   if (error) {
     return (
       <section className="health-card">
-        <div className="health-card__state health-card__state--error">Service issue</div>
+        <div className="health-card__state health-card__state--error">시스템 오류</div>
         <h2>{error.title}</h2>
         <p>{error.message}</p>
       </section>
@@ -25,27 +25,26 @@ export const HealthPanel = () => {
 
   return (
     <section className="health-card">
-      <div className="health-card__state">System health</div>
-      <h2>Shared API contract example</h2>
+      <div className="health-card__state">시스템 상태</div>
+      <h2>서버리스 런타임 점검</h2>
       <p>
-        This card still follows the component-hook-service chain and remains the starter pattern for
-        new vertical slices.
+        제품 기능이 늘어나더라도 최소 운영 상태를 바로 확인할 수 있도록 남겨 둔 점검 카드입니다.
       </p>
       <ul className="health-list">
         <li>
-          <strong>Status</strong>
-          <span>{data?.status}</span>
+          <strong>상태</strong>
+          <span>{data?.status === "ok" ? "정상" : "저하"}</span>
         </li>
         <li>
-          <strong>Service</strong>
+          <strong>서비스</strong>
           <span>{data?.service}</span>
         </li>
         <li>
-          <strong>Version</strong>
+          <strong>버전</strong>
           <span>{data?.version}</span>
         </li>
         <li>
-          <strong>Timestamp</strong>
+          <strong>시간</strong>
           <span>{data?.timestamp}</span>
         </li>
       </ul>

@@ -1,14 +1,28 @@
-# ADR-0001: Template-first harness architecture
+# ADR-0001: Adopt a template-first delivery harness
 
-- **Status:** Accepted
-- **Date:** 2026-03-26
+## Status
+
+Accepted
 
 ## Context
-Internal web projects are repeatedly re-solving the same setup and architecture concerns.
+
+Internal projects repeatedly spend time rebuilding the same delivery setup, folder boundaries, workflow rules, and documentation patterns.
+The repository needs a stable baseline that can be reused across multiple products without redefining the engineering process each time.
 
 ## Decision
-Adopt a template-first monorepo with explicit agent workflow guidance, strict layer boundaries, and a standardized task execution model.
+
+The repository adopts a template-first harness model.
+
+Core rules:
+- use a reusable monorepo as the project baseline
+- keep architecture boundaries explicit in folders and docs
+- define work through small task documents
+- keep decisions in ADRs
+- make validation and documentation part of normal delivery
 
 ## Consequences
-- Faster project bootstrap and more consistent quality.
-- Slight up-front cost to maintain shared docs/templates.
+
+- new projects can start from an opinionated and reusable baseline
+- teams get consistent task, architecture, and documentation structure
+- architectural drift becomes easier to detect
+- the repository carries some upfront maintenance cost in exchange for faster project startup
