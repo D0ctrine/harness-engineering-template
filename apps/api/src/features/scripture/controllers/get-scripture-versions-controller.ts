@@ -4,7 +4,7 @@ import { createScriptureQueryService, ScriptureServiceError } from "../services/
 
 export const createGetScriptureVersionsController = (): ApiHandler => {
   return async (request, context) => {
-    const service = createScriptureQueryService(context.bindings, context.config);
+    const service = createScriptureQueryService(context.bindings, context.config, request);
 
     try {
       const versions = await service.getVersions();

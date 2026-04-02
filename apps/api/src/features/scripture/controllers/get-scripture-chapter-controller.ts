@@ -4,7 +4,7 @@ import { createScriptureQueryService, ScriptureServiceError } from "../services/
 
 export const createGetScriptureChapterController = (): ApiHandler => {
   return async (request, context) => {
-    const service = createScriptureQueryService(context.bindings, context.config);
+    const service = createScriptureQueryService(context.bindings, context.config, request);
     const url = new URL(request.url);
 
     try {

@@ -19,7 +19,46 @@ export class ScriptureServiceError extends Error {
 
 const normalizeBookId = (value: string) => value.trim().toLowerCase();
 
-const resolveAssetBaseUrl = (bindings: ApiBindings, config: ApiRuntimeConfig) => {
+const isLocalDevelopmentOrigin = (value: string) => {
+  try {
+    const url = new URL(value);
+    return ["localhost", "127.0.0.1"].includes(url.hostname);
+  } catch {
+    return false;
+  }
+};
+
+const resolveRequestAssetBaseUrl = (request: Request) => {
+  const origin = request.headers.get("origin");
+
+  if (origin && isLocalDevelopmentOrigin(origin)) {
+    return `${origin.replace(/\/+$/, "")}/scripture`;
+  }
+
+  const referer = request.headers.get("referer");
+
+  if (!referer) {
+    return null;
+  }
+
+  try {
+    const url = new URL(referer);
+
+    if (isLocalDevelopmentOrigin(url.origin)) {
+      return `${url.origin.replace(/\/+$/, "")}/scripture`;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+};
+
+const resolveAssetBaseUrl = (
+  bindings: ApiBindings,
+  config: ApiRuntimeConfig,
+  request?: Request
+) => {
   const configured =
     typeof bindings.SCRIPTURE_ASSET_BASE_URL === "string"
       ? bindings.SCRIPTURE_ASSET_BASE_URL.trim()
@@ -27,6 +66,12 @@ const resolveAssetBaseUrl = (bindings: ApiBindings, config: ApiRuntimeConfig) =>
 
   if (configured) {
     return configured.replace(/\/+$/, "");
+  }
+
+  const requestAssetBaseUrl = request ? resolveRequestAssetBaseUrl(request) : null;
+
+  if (requestAssetBaseUrl) {
+    return requestAssetBaseUrl;
   }
 
   return config.scriptureAssetBaseUrl.replace(/\/+$/, "");
@@ -40,7 +85,7 @@ const createAssetsBindingFetcher = (assets: AssetBinding): typeof fetch => {
   };
 };
 
-const getRepository = (bindings: ApiBindings, config: ApiRuntimeConfig) => {
+const getRepository = (bindings: ApiBindings, config: ApiRuntimeConfig, request?: Request) => {
   const assetsBinding = bindings.ASSETS;
 
   if (assetsBinding) {
@@ -60,7 +105,7 @@ const getRepository = (bindings: ApiBindings, config: ApiRuntimeConfig) => {
     return repository;
   }
 
-  const baseUrl = resolveAssetBaseUrl(bindings, config);
+  const baseUrl = resolveAssetBaseUrl(bindings, config, request);
   const cached = repositoryCache.get(`url:${baseUrl}`);
 
   if (cached) {
@@ -85,9 +130,10 @@ export interface ScriptureQueryService {
 
 export const createScriptureQueryService = (
   bindings: ApiBindings,
-  config: ApiRuntimeConfig
+  config: ApiRuntimeConfig,
+  request?: Request
 ): ScriptureQueryService => {
-  const repository = getRepository(bindings, config);
+  const repository = getRepository(bindings, config, request);
   const getVersionsUseCase = createGetScriptureVersionsUseCase(repository);
   const getBooksUseCase = createGetScriptureBooksUseCase(repository);
   const getChapterUseCase = createGetScriptureChapterUseCase(repository);

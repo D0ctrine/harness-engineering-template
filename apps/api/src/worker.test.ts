@@ -194,3 +194,47 @@ test("GET /api/scripture/versions prefers the Cloudflare ASSETS binding when ava
   assert.equal(bindingFetchCalls[0], "https://assets.local/scripture/index.json");
   assert.equal(body[0].name, "개역개정");
 });
+
+test("GET /api/scripture/versions uses the request origin for local scripture assets when no explicit asset base is set", async () => {
+  const originalFetch = globalThis.fetch;
+  const fetchCalls: string[] = [];
+
+  globalThis.fetch = (async (input) => {
+    const url = String(input);
+    fetchCalls.push(url);
+
+    return new Response(
+      JSON.stringify({
+        versions: [{ id: "kor-revised", name: "개역개정", languageCode: "ko", isDefault: true }],
+        books: []
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      }
+    );
+  }) as typeof fetch;
+
+  try {
+    const response = await handleApiRequest(
+      new Request("http://localhost:4000/api/scripture/versions", {
+        method: "GET",
+        headers: {
+          Origin: "http://localhost:3002"
+        }
+      }),
+      {
+        ...bindings,
+        SCRIPTURE_ASSET_BASE_URL: undefined
+      }
+    );
+
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(fetchCalls[0], "http://localhost:3002/scripture/index.json");
+    assert.equal(body[0].name, "개역개정");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});

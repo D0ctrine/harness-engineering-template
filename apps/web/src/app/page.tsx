@@ -26,32 +26,32 @@ export default function HomePage() {
                   </a>
                 </div>
               </div>
-
-              <aside className="landing-verse-card" aria-label="오늘의 중심 말씀">
-                <div className="landing-verse-card__top">
-                  <img
-                    className="landing-verse-card__mark"
-                    src="/icons/juyaro-mark.svg"
-                    alt=""
-                    aria-hidden="true"
-                    width="60"
-                    height="60"
-                  />
-                  <p className="landing-verse-card__label">오늘의 중심 말씀</p>
-                </div>
-                <h2>여호수아 1:1-8</h2>
-                <blockquote>
-                  이 율법책을 네 입에서 떠나지 말게 하며 주야로 그것을 묵상하여 그 안에 기록된 대로 다 지켜 행하라 그리하면 네 길이 평탄하게 될 것이며 네가 형통하리라
-                </blockquote>
-                <p className="landing-verse-card__summary">
-                  여호수아 1장 1절부터 8절까지 읽으며, 말씀을 가까이 두고 삶에 적용하는 묵상을 시작합니다.
-                </p>
-              </aside>
             </div>
           </section>
 
-          <section className="landing-grid" id="experience">
-            <article className="surface-card">
+          <section className="landing-highlight-stack" id="experience">
+            <article className="surface-card surface-card--verse surface-card--wide">
+              <div className="surface-card__verse-layout">
+                <img
+                  className="surface-card__portrait"
+                  src="/illustrations/Joshua.png"
+                  alt="여호수아 일러스트"
+                  width="420"
+                  height="420"
+                />
+                <div className="surface-card__verse-copy">
+                  <p className="reading-section-label">오늘의 중심 말씀</p>
+                  <h2>여호수아 1:8</h2>
+                  <blockquote className="surface-card__verse">
+                    이 율법책을 네 입에서 떠나지 말게 하며 주야로 그것을 묵상하여 그 안에
+                    기록된 대로 다 지켜 행하라 그리하면 네 길이 평탄하게 될 것이며 네가
+                    형통하리라
+                  </blockquote>
+                </div>
+              </div>
+            </article>
+
+            <article className="surface-card surface-card--wide">
               <h2>한 화면에서 읽기와 메모</h2>
               <p>
                 QT 화면은 왼쪽 말씀과 오른쪽 노트로 바로 열립니다. 읽는 흐름이 끊기지 않도록
@@ -69,50 +69,6 @@ export default function HomePage() {
                 <li>
                   <strong>집중된 흐름</strong>
                   <span>메인 진입은 설치형 읽기 화면인 <code>/app</code>으로 바로 연결됩니다.</span>
-                </li>
-              </ul>
-            </article>
-
-            <article className="surface-card">
-              <h2>묵상과 나눔으로 이어가기</h2>
-              <p>
-                읽은 말씀은 메모에서 끝나지 않고, 아래 묵상 질문과 공동체 나눔 흐름으로
-                자연스럽게 이어집니다.
-              </p>
-              <ul className="stack-list">
-                <li>
-                  <strong>메모</strong>
-                  <span>본문 옆에서 바로 적으면서 생각을 놓치지 않습니다.</span>
-                </li>
-                <li>
-                  <strong>묵상 질문</strong>
-                  <span>읽은 본문을 삶과 연결하는 질문으로 마음을 정리합니다.</span>
-                </li>
-                <li>
-                  <strong>나눔</strong>
-                  <span>공동체 공유는 선택적으로, 그룹 안에서 안전하게 이어집니다.</span>
-                </li>
-              </ul>
-            </article>
-
-            <article className="surface-card">
-              <h2>설치하고 자주 돌아오기</h2>
-              <p>
-                모바일과 데스크톱 모두에서 하나의 PWA로 접근하고, 앱처럼 다시 돌아올 수 있게
-                구성했습니다.
-              </p>
-              <ul className="stack-list">
-                <li>
-                  <strong>Manifest</strong>
-                  <span>읽기와 묵상으로 바로 들어가는 바로가기를 제공합니다.</span>
-                </li>
-                <li>
-                  <strong>서비스 워커</strong>
-                  <span>오프라인 상황에서도 기본 셸과 안내 화면을 유지합니다.</span>
-                </li>
-                <li>
-                  <strong>설치형 셸</strong>
-                  <span>브라우저 UI 방해 없이 짧은 일상 방문에 집중할 수 있습니다.</span>
                 </li>
               </ul>
             </article>
