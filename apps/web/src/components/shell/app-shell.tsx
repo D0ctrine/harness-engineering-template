@@ -1,11 +1,4 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
-
-export interface ShellNavItem {
-  key: string;
-  label: string;
-  href: string;
-}
 
 interface AppShellSection {
   key: string;
@@ -17,13 +10,6 @@ interface AppShellProps {
   children: ReactNode;
   currentSection: AppShellSection;
 }
-
-const shellNavItems: ShellNavItem[] = [
-  { key: "read", label: "읽기", href: "/app#today-reading" },
-  { key: "note", label: "메모", href: "/app#note-workspace" },
-  { key: "reflect", label: "묵상", href: "/app#reflection-step" },
-  { key: "share", label: "나눔", href: "/app#community-preview" }
-];
 
 export const AppShell = ({ children, currentSection }: AppShellProps) => {
   return (
@@ -46,22 +32,6 @@ export const AppShell = ({ children, currentSection }: AppShellProps) => {
         </header>
 
         <section className="app-shell__content">{children}</section>
-
-        <nav className="app-shell__nav" aria-label="앱 섹션">
-          {shellNavItems.map((item) => {
-            const isActive = item.key === currentSection.key;
-
-            return (
-              <Link
-                key={item.key}
-                className={`app-shell__tab${isActive ? " app-shell__tab--active" : ""}`}
-                href={item.href}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
       </div>
     </main>
   );

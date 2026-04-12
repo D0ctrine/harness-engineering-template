@@ -31,3 +31,8 @@
 - repo structure is designed to keep cost low and module boundaries clear
 - business logic should be implemented in `packages/application`, not inside handlers
 - infrastructure code should remain compatible with stateless execution and edge/serverless deployment
+
+## Boundary enforcement principles
+- API handlers never perform persistence operations directly.
+- UI components never perform remote requests directly.
+- Shared types represent contracts between frontend and backend.

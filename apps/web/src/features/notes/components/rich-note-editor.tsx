@@ -41,6 +41,7 @@ interface RichNoteEditorProps {
 export interface RichNoteEditorHandle {
   clearBold: () => void;
   clearColor: () => void;
+  getBodyText: () => string;
 }
 
 const PANEL_WIDTH = 304;
@@ -217,7 +218,7 @@ export const RichNoteEditor = forwardRef<RichNoteEditorHandle, RichNoteEditorPro
     embed.remove();
 
     if (!root.textContent?.trim()) {
-      root.innerHTML = "<p><br></p>";
+      root.innerHTML = "";
     }
 
     focusEditor();
@@ -241,6 +242,8 @@ export const RichNoteEditor = forwardRef<RichNoteEditorHandle, RichNoteEditorPro
     runEditorCommand(() => clearColorAtSelection());
     emitFormattingState({ ...formattingStateRef.current, color: null });
   };
+
+  const getBodyText = () => editorRef.current?.innerText ?? "";
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "/") {
@@ -317,7 +320,8 @@ export const RichNoteEditor = forwardRef<RichNoteEditorHandle, RichNoteEditorPro
     ref,
     () => ({
       clearBold,
-      clearColor
+      clearColor,
+      getBodyText
     }),
     []
   );

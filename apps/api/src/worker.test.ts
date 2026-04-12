@@ -27,6 +27,23 @@ test("GET /api/reading/home returns the reading home payload", async () => {
   assert.equal(body.passage.verses.length, 8);
 });
 
+test("GET /api/reading/home allows local network origins during development", async () => {
+  const origin = "http://192.168.0.28:3000";
+  const response = await handleApiRequest(
+    new Request("http://localhost:4000/api/reading/home", {
+      method: "GET",
+      headers: { Origin: origin }
+    }),
+    {
+      ...bindings,
+      NODE_ENV: "development"
+    }
+  );
+
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("Access-Control-Allow-Origin"), origin);
+});
+
 test("GET /api/health keeps the health route available", async () => {
   const response = await handleApiRequest(
     new Request("http://localhost:4000/api/health", { method: "GET" }),

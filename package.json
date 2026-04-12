@@ -15,7 +15,8 @@
     "build": "npm run build --workspaces --if-present",
     "check": "npm run lint && npm run test && npm run build",
     "capture:ui": "node scripts/capture-ui.mjs",
-    "import:scripture": "node scripts/import-scripture-assets.mjs"
+    "import:scripture": "node scripts/import-scripture-assets.mjs",
+    "capture": "node scripts/capture-page.mjs --url=${CAPTURE_URL:-http://localhost:3000} --out=${CAPTURE_OUT:-artifacts/screenshots/home.png}"
   },
   "engines": {
     "node": ">=20.0.0",

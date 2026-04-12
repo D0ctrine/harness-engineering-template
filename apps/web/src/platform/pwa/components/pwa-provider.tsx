@@ -3,8 +3,11 @@
 import { useEffect, useState } from "react";
 import { InstallHint } from "./install-hint";
 import {
+  isInstalledExperience,
   isIosDevice,
+  isMobileDevice,
   isStandaloneDisplayMode,
+  storeInstalledState,
   type InstallPromptEvent,
   type PwaInstallState
 } from "../lib/install-state";
@@ -14,6 +17,7 @@ const initialState: PwaInstallState = {
   isInstallable: false,
   isInstalled: false,
   isIos: false,
+  isMobile: false,
   deferredPrompt: null
 };
 
@@ -25,8 +29,9 @@ export const PwaProvider = () => {
   useEffect(() => {
     setInstallState({
       isInstallable: false,
-      isInstalled: isStandaloneDisplayMode(),
+      isInstalled: isInstalledExperience(),
       isIos: isIosDevice(),
+      isMobile: isMobileDevice(),
       deferredPrompt: null
     });
 
@@ -52,14 +57,21 @@ export const PwaProvider = () => {
         isInstalled: true,
         deferredPrompt: null
       }));
+      storeInstalledState();
       setIsDismissed(true);
     };
 
     const standaloneMedia = window.matchMedia("(display-mode: standalone)");
     const handleDisplayModeChange = () => {
+      const isInstalled = isInstalledExperience();
+
+      if (isInstalled) {
+        storeInstalledState();
+      }
+
       setInstallState((current) => ({
         ...current,
-        isInstalled: isStandaloneDisplayMode()
+        isInstalled
       }));
     };
 
@@ -77,22 +89,26 @@ export const PwaProvider = () => {
 
   const handleInstall = async () => {
     if (!installState.deferredPrompt) {
-      return;
+      return false;
     }
 
     await installState.deferredPrompt.prompt();
     const choice = await installState.deferredPrompt.userChoice;
+    const isAccepted = choice.outcome === "accepted";
 
     setInstallState((current) => ({
       ...current,
       isInstallable: false,
-      isInstalled: choice.outcome === "accepted" ? true : current.isInstalled,
+      isInstalled: isAccepted ? true : current.isInstalled,
       deferredPrompt: null
     }));
 
-    if (choice.outcome === "accepted") {
+    if (isAccepted) {
+      storeInstalledState();
       setIsDismissed(true);
     }
+
+    return true;
   };
 
   if (isDismissed && !hasUpdate) {

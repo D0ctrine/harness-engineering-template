@@ -37,6 +37,7 @@ Notes:
 - `npm run build`
 - `npm run check`
 - `npm run capture:ui`
+- `npm run capture`
 - `curl http://localhost:4000/api/health`
 - `curl http://localhost:4000/api/reading/home`
 - `curl http://localhost:4000/api/notes/workspace`
@@ -71,7 +72,8 @@ Notes:
 1. Start the API runtime.
 2. Start the web runtime with `PORT=3001 npm run start --workspace @harness/web`.
 3. Run `npm run capture:ui`.
-4. Review the generated screenshots under `artifacts/ui-captures`.
+4. Run `CAPTURE_URL=http://localhost:3001 npm run capture` when a single PR evidence screenshot is needed.
+5. Review the generated screenshots under `artifacts/ui-captures` and `artifacts/screenshots`.
 
 ## Service Worker Reset
 

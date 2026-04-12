@@ -17,3 +17,7 @@
 ## Documentation updates
 - [ ] docs/architecture
 - [ ] docs/decisions (if architecture changed)
+
+## Evidence
+- [ ] UI screenshot attached (if UI changed)
+- [ ] Screenshot path documented (`artifacts/screenshots/...`)

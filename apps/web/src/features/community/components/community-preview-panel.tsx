@@ -2,7 +2,14 @@
 
 import { useCommunityPreview } from "../hooks/use-community-preview";
 
-export const CommunityPreviewPanel = () => {
+export type ShareScope = "group" | "external";
+
+interface CommunityPreviewPanelProps {
+  scope?: ShareScope;
+  groupId?: string;
+}
+
+export const CommunityPreviewPanel = ({ scope = "group", groupId }: CommunityPreviewPanelProps) => {
   const { data, error, isLoading } = useCommunityPreview();
 
   if (isLoading) {
@@ -23,21 +30,38 @@ export const CommunityPreviewPanel = () => {
     );
   }
 
+  const isGroupScope = scope === "group" && Boolean(data.group);
+  const scopeLabel = isGroupScope ? "그룹 나눔" : "전체 나눔";
+  const scopeTitle = isGroupScope ? data.title : "전체 묵상 나눔";
+  const scopeSummary = isGroupScope
+    ? data.summary
+    : "그룹 밖의 사람들과 공개적으로 나눈 묵상을 둘러봅니다.";
+  const scopeBadge = isGroupScope ? data.group.name : "외부 공개";
+  const scopeDescription = isGroupScope
+    ? data.group.description
+    : "그룹 파라미터가 없거나 외부 범위로 열린 나눔 화면입니다.";
+
   return (
     <section className="surface-card community-panel">
       <div className="community-panel__header">
         <div>
-          <p className="reading-section-label">나눔</p>
-          <h2>{data.title}</h2>
+          <p className="reading-section-label">{scopeLabel}</p>
+          <h2>{scopeTitle}</h2>
         </div>
-        <span className="reading-reference-pill">{data.group.name}</span>
+        <span className="reading-reference-pill">{scopeBadge}</span>
       </div>
 
-      <p className="community-panel__summary">{data.summary}</p>
+      <p className="community-panel__summary">{scopeSummary}</p>
 
       <div className="community-panel__meta">
-        <span>{data.group.description}</span>
-        <span>역할: {data.membership.role === "member" ? "멤버" : "운영자"}</span>
+        <span>{scopeDescription}</span>
+        {isGroupScope ? (
+          <span>
+            범위: {groupId ?? data.group.id} / 역할: {data.membership.role === "member" ? "멤버" : "운영자"}
+          </span>
+        ) : (
+          <span>범위: 외부 공개</span>
+        )}
       </div>
 
       <div className="community-post-list">

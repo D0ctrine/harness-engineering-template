@@ -40,7 +40,6 @@ export default function HomePage() {
                   height="420"
                 />
                 <div className="surface-card__verse-copy">
-                  <p className="reading-section-label">오늘의 중심 말씀</p>
                   <h2>여호수아 1:8</h2>
                   <blockquote className="surface-card__verse">
                     이 율법책을 네 입에서 떠나지 말게 하며 주야로 그것을 묵상하여 그 안에

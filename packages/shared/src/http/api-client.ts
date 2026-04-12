@@ -10,7 +10,7 @@ export class EnterpriseApiClient {
   constructor(private readonly baseUrl: string) {}
 
   async request<T>(path: string, method: HttpMethod = "GET", body?: unknown): Promise<T> {
-    const response = await fetch(`${this.baseUrl}${path}`, {
+    const response = await fetch(`${this.resolveBaseUrl()}${path}`, {
       method,
       headers: {
         "Content-Type": "application/json"
@@ -34,5 +34,30 @@ export class EnterpriseApiClient {
     }
 
     return response.json() as Promise<T>;
+  }
+
+  private resolveBaseUrl() {
+    if (typeof window === "undefined") {
+      return this.baseUrl;
+    }
+
+    const currentHost = window.location.hostname;
+
+    if (["localhost", "127.0.0.1"].includes(currentHost)) {
+      return this.baseUrl;
+    }
+
+    try {
+      const url = new URL(this.baseUrl);
+
+      if (!["localhost", "127.0.0.1"].includes(url.hostname)) {
+        return this.baseUrl;
+      }
+
+      url.hostname = currentHost;
+      return url.toString().replace(/\/$/, "");
+    } catch {
+      return this.baseUrl;
+    }
   }
 }

@@ -48,6 +48,11 @@ tasks/        # task backlog/in-progress/done
 - `npm run build`
 - `npm run check` (runs all)
 
+## Visual capture workflow
+- Start web app (`npm run dev`)
+- Capture screenshot (`npm run capture`)
+- Store outputs under `artifacts/screenshots/` for PR evidence
+
 ## Template-first operating model
 - Use `tasks/` + `templates/` to define small, reviewable increments.
 - Keep architecture decisions in `docs/decisions`.

@@ -1,12 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import type { PwaInstallState } from "../lib/install-state";
 
 interface InstallHintProps {
   hasUpdate: boolean;
   installState: PwaInstallState;
   onDismiss: () => void;
-  onInstall: () => Promise<void>;
+  onInstall: () => Promise<boolean>;
 }
 
 export const InstallHint = ({
@@ -15,6 +16,16 @@ export const InstallHint = ({
   onDismiss,
   onInstall
 }: InstallHintProps) => {
+  const [manualInstallHint, setManualInstallHint] = useState(false);
+
+  const handleInstallClick = async () => {
+    const didOpenPrompt = await onInstall();
+
+    if (!didOpenPrompt) {
+      setManualInstallHint(true);
+    }
+  };
+
   if (hasUpdate) {
     return (
       <aside className="pwa-banner" aria-live="polite">
@@ -44,7 +55,7 @@ export const InstallHint = ({
           홈 화면에 추가하면 브라우저 없이 <code>/app</code>으로 바로 들어갈 수 있습니다.
         </p>
         <div className="pwa-banner__actions">
-          <button className="button-primary" onClick={() => void onInstall()} type="button">
+          <button className="button-primary" onClick={() => void handleInstallClick()} type="button">
             앱 설치
           </button>
           <button className="button-secondary" onClick={onDismiss} type="button">
@@ -63,7 +74,38 @@ export const InstallHint = ({
           Safari에서 공유 메뉴를 연 뒤 <strong>홈 화면에 추가</strong>를 선택하면 앱처럼 실행할
           수 있습니다.
         </p>
+        {manualInstallHint ? (
+          <p className="pwa-banner__hint">iOS Safari는 설치창을 버튼으로 바로 열 수 없습니다.</p>
+        ) : null}
         <div className="pwa-banner__actions">
+          <button className="button-primary" onClick={() => void handleInstallClick()} type="button">
+            앱 설치
+          </button>
+          <button className="button-secondary" onClick={onDismiss} type="button">
+            안내 숨기기
+          </button>
+        </div>
+      </aside>
+    );
+  }
+
+  if (installState.isMobile) {
+    return (
+      <aside className="pwa-banner" aria-live="polite">
+        <h2>홈 화면에 추가</h2>
+        <p>
+          브라우저 메뉴에서 <strong>앱 설치</strong> 또는 <strong>홈 화면에 추가</strong>를
+          선택하면 바로 열 수 있습니다.
+        </p>
+        {manualInstallHint ? (
+          <p className="pwa-banner__hint">
+            현재 브라우저에서는 설치창을 자동으로 열 수 없습니다. 주소창 메뉴에서 설치를 선택해 주세요.
+          </p>
+        ) : null}
+        <div className="pwa-banner__actions">
+          <button className="button-primary" onClick={() => void handleInstallClick()} type="button">
+            앱 설치
+          </button>
           <button className="button-secondary" onClick={onDismiss} type="button">
             안내 숨기기
           </button>

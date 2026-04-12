@@ -6,7 +6,14 @@ const ACCESS_CONTROL_ALLOW_METHODS = "GET,POST,PUT,PATCH,DELETE,OPTIONS";
 const isLocalDevelopmentOrigin = (origin: string) => {
   try {
     const url = new URL(origin);
-    return ["localhost", "127.0.0.1"].includes(url.hostname);
+    if (["localhost", "127.0.0.1"].includes(url.hostname)) {
+      return true;
+    }
+
+    const privateIpv4Pattern =
+      /^(10\.\d{1,3}\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3}|172\.(1[6-9]|2\d|3[0-1])\.\d{1,3}\.\d{1,3})$/;
+
+    return privateIpv4Pattern.test(url.hostname);
   } catch {
     return false;
   }

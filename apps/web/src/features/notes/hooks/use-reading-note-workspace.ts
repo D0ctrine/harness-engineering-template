@@ -9,6 +9,8 @@ export const useReadingNoteWorkspace = () => {
   const [data, setData] = useState<ReadingNoteWorkspace | null>(null);
   const [error, setError] = useState<UserFacingError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [saveError, setSaveError] = useState<UserFacingError | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     let isActive = true;
@@ -38,5 +40,27 @@ export const useReadingNoteWorkspace = () => {
     };
   }, []);
 
-  return { data, error, isLoading };
+  const saveNote = async (body: string) => {
+    if (!data) {
+      return null;
+    }
+
+    try {
+      setIsSaving(true);
+      setSaveError(null);
+
+      const savedNote = await notesService.saveReadingNote(data.savedNote, body);
+
+      setData((currentData) => currentData ? { ...currentData, savedNote } : currentData);
+
+      return savedNote;
+    } catch (err) {
+      setSaveError(mapApiErrorToUserMessage(err));
+      return null;
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  return { data, error, isLoading, isSaving, saveError, saveNote };
 };

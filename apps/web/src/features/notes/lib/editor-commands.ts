@@ -8,7 +8,7 @@ const escapeHtml = (value: string) =>
 
 export const buildInitialEditorHtml = (value: string) => {
   if (!value.trim()) {
-    return "<p><br></p>";
+    return "";
   }
 
   return value

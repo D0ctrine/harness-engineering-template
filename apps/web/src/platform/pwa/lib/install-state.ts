@@ -12,8 +12,27 @@ export interface PwaInstallState {
   isInstallable: boolean;
   isInstalled: boolean;
   isIos: boolean;
+  isMobile: boolean;
   deferredPrompt: InstallPromptEvent | null;
 }
+
+const INSTALLED_STORAGE_KEY = "juyaro-pwa-installed";
+
+export const hasStoredInstalledState = () => {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  return window.localStorage.getItem(INSTALLED_STORAGE_KEY) === "true";
+};
+
+export const storeInstalledState = () => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.setItem(INSTALLED_STORAGE_KEY, "true");
+};
 
 export const isIosDevice = () => {
   if (typeof window === "undefined") {
@@ -32,6 +51,18 @@ export const isStandaloneDisplayMode = () => {
     window.matchMedia("(display-mode: standalone)").matches ||
     window.navigator.standalone === true
   );
+};
+
+export const isInstalledExperience = () => {
+  return isStandaloneDisplayMode() || hasStoredInstalledState();
+};
+
+export const isMobileDevice = () => {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  return /android|iphone|ipad|ipod|mobile/i.test(window.navigator.userAgent);
 };
 
 declare global {

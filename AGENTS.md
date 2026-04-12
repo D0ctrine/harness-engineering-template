@@ -8,6 +8,7 @@ This repository is a reusable enterprise harness for agent-driven web delivery. 
 - Keep every change small, testable, and documented.
 - Write code for agent readability first (stable naming, predictable folders, low indirection).
 - Add or update docs for any architectural or workflow change.
+- For UI-visible changes, capture and attach screenshots from `artifacts/screenshots/` when tooling is available.
 
 ## Layer boundaries
 - `apps/web` UI layer may call only web services/hooks, not remote APIs directly.
@@ -61,3 +62,4 @@ A task is done when:
 2. Execute: implement one vertical slice at a time with clear commits.
 3. Validate: run setup/lint/test/build and record outputs.
 4. Document: update docs and task status; capture decisions in ADRs when needed.
+5. Evidence: for UI changes run capture workflow and include screenshot paths in the PR.

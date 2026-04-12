@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useRef, useState } from "react";
 import type { EditorFormattingState } from "../lib/editor-commands";
 import { useReadingNoteWorkspace } from "../hooks/use-reading-note-workspace";
+import { useReflectionHome } from "../../reflection/hooks/use-reflection-home";
 import { RichNoteEditor, type RichNoteEditorHandle } from "./rich-note-editor";
 
 const initialFormattingState: EditorFormattingState = {
@@ -11,14 +13,20 @@ const initialFormattingState: EditorFormattingState = {
 };
 
 export const ReadingNotePanel = () => {
-  const { data, error, isLoading } = useReadingNoteWorkspace();
+  const { data, error, isLoading, isSaving, saveError, saveNote } = useReadingNoteWorkspace();
+  const {
+    data: reflectionData,
+    error: reflectionError,
+    isLoading: isReflectionLoading
+  } = useReflectionHome();
   const editorRef = useRef<RichNoteEditorHandle | null>(null);
   const [formattingState, setFormattingState] = useState(initialFormattingState);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saved">("idle");
 
-  if (isLoading) {
+  if (isLoading || isReflectionLoading) {
     return (
       <section className="loading-card">
-        <p>메모 작업 영역을 불러오는 중입니다.</p>
+        <p>묵상 노트를 불러오는 중입니다.</p>
       </section>
     );
   }
@@ -39,6 +47,16 @@ export const ReadingNotePanel = () => {
     hour: "2-digit",
     minute: "2-digit"
   }).format(new Date(data.savedNote.updatedAt));
+  const editorPlaceholder = reflectionData
+    ? `${reflectionData.answerPlaceholder}\n\n${data.placeholder}`
+    : data.placeholder;
+  const handleSaveClick = async () => {
+    const savedNote = await saveNote(editorRef.current?.getBodyText() ?? data.savedNote.body);
+
+    if (savedNote) {
+      setSaveStatus("saved");
+    }
+  };
 
   return (
     <section className="note-panel" aria-label="묵상 노트 페이지">
@@ -48,7 +66,12 @@ export const ReadingNotePanel = () => {
           <h2>{data.title}</h2>
         </div>
         <div className="note-panel__header-side">
-          <span className="reading-reference-pill">{data.savedNote.reference.passageReference}</span>
+          <div className="note-panel__top-actions">
+            <span className="reading-reference-pill">{data.savedNote.reference.passageReference}</span>
+            <Link className="note-panel__share-link" href="/app/share?scope=group" aria-label="나눔 보기">
+              <span aria-hidden="true">&gt;</span>
+            </Link>
+          </div>
           <div className="note-panel__format-chips" aria-live="polite">
             {formattingState.isBold ? (
               <button
@@ -76,17 +99,41 @@ export const ReadingNotePanel = () => {
         </div>
       </div>
 
+      <div className="note-panel__prompt">
+        <p className="reading-section-label">묵상 질문</p>
+        {reflectionData ? (
+          <>
+            <strong>{reflectionData.question.prompt}</strong>
+            <p>아래 옥스포드 노트에 질문의 답변과 오늘의 묵상을 함께 적어 보세요.</p>
+          </>
+        ) : (
+          <p>{reflectionError?.message ?? "묵상 질문을 불러오지 못했습니다."}</p>
+        )}
+      </div>
+
       <div className="note-editor note-editor--oxford">
         <RichNoteEditor
           ref={editorRef}
           initialBody={data.savedNote.body}
-          placeholder={data.placeholder}
+          placeholder={editorPlaceholder}
           onFormattingStateChange={setFormattingState}
         />
       </div>
 
       <div className="note-panel__footer">
-        <p>마지막 저장 미리보기: {formattedUpdatedAt}</p>
+        <p>
+          {saveError
+            ? saveError.message
+            : `${saveStatus === "saved" ? "저장되었습니다" : "마지막 저장"}: ${formattedUpdatedAt}`}
+        </p>
+        <button
+          className="button-primary note-panel__save-button"
+          type="button"
+          onClick={() => void handleSaveClick()}
+          disabled={isSaving}
+        >
+          {isSaving ? "저장 중" : "저장하기"}
+        </button>
       </div>
     </section>
   );

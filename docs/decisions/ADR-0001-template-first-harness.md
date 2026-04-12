@@ -4,6 +4,10 @@
 
 Accepted
 
+## Date
+
+2026-03-26
+
 ## Context
 
 Internal projects repeatedly spend time rebuilding the same delivery setup, folder boundaries, workflow rules, and documentation patterns.
