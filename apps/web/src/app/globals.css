@@ -314,6 +314,19 @@ select {
     calc(20px + env(safe-area-inset-top))
     16px
     calc(20px + env(safe-area-inset-bottom));
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Apple SD Gothic Neo",
+    "Noto Sans KR",
+    "Segoe UI",
+    sans-serif;
+  letter-spacing: 0;
+}
+
+.app-shell .button-primary,
+.app-shell .button-secondary {
+  letter-spacing: 0;
 }
 
 .app-shell__frame {
@@ -526,7 +539,7 @@ select {
 .reading-passage-card {
   display: grid;
   grid-template-rows: auto 1fr;
-  gap: 14px;
+  gap: 16px;
   min-height: 100%;
   padding: 22px 24px 28px;
   border-radius: 28px;
@@ -537,16 +550,65 @@ select {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
 }
 
+.reading-content-stack {
+  display: grid;
+  gap: 16px;
+}
+
+.reading-content-section {
+  display: grid;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(132, 104, 61, 0.12);
+}
+
+.reading-content-section:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.reading-content-section__header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.reading-content-section__header h3 {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  margin: 0;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: rgba(15, 118, 104, 0.1);
+  color: var(--page-accent-strong);
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.reading-content-section__body,
+.reading-application-list p {
+  margin: 0;
+  color: var(--page-muted);
+  line-height: 1.68;
+}
+
+.reading-application-list {
+  display: grid;
+  gap: 6px;
+}
+
 .reading-verse-list {
   display: grid;
-  gap: 14px;
+  gap: 4px;
 }
 
 .reading-verse {
   margin: 0;
   color: var(--page-ink);
   font-size: clamp(1rem, 1.8vw, 1.18rem);
-  line-height: 1.92;
+  line-height: 1.72;
 }
 
 .reading-verse span {
@@ -570,7 +632,7 @@ select {
 }
 
 .note-panel {
-  grid-template-rows: auto auto 1fr auto;
+  grid-template-rows: auto 1fr auto;
   min-height: 100%;
   padding: 28px 26px 30px;
   border-radius: 34px;
@@ -600,6 +662,11 @@ select {
   gap: 10px;
 }
 
+.note-panel__header h2 {
+  margin: 0;
+  line-height: 1.12;
+}
+
 .note-panel__top-actions {
   display: flex;
   align-items: center;
@@ -611,13 +678,14 @@ select {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
+  min-width: 88px;
   height: 38px;
+  padding: 0 12px;
   border-radius: 8px;
   border: 1px solid rgba(23, 35, 42, 0.1);
   background: rgba(255, 255, 255, 0.86);
   color: var(--page-accent-strong);
-  font-size: 1.2rem;
+  font-size: 0.92rem;
   font-weight: 800;
   line-height: 1;
   transition:
@@ -637,20 +705,6 @@ select {
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 8px;
-}
-
-.note-panel__prompt {
-  display: grid;
-  gap: 8px;
-  padding: 16px 18px;
-  border-radius: 20px;
-  border: 1px solid rgba(23, 35, 42, 0.08);
-  background: rgba(255, 255, 255, 0.7);
-}
-
-.note-panel__prompt strong {
-  color: var(--page-ink);
-  line-height: 1.6;
 }
 
 .note-format-chip {
@@ -692,7 +746,6 @@ select {
 .note-panel__summary,
 .reflection-panel__summary,
 .community-panel__summary,
-.note-panel__prompt p,
 .community-post-card p,
 .community-comment span,
 .community-panel__meta span,
@@ -1161,6 +1214,40 @@ select {
       calc(14px + env(safe-area-inset-top))
       12px
       calc(14px + env(safe-area-inset-bottom));
+    font-size: 16px;
+  }
+
+  .app-shell__frame {
+    gap: 18px;
+  }
+
+  .app-shell__top {
+    gap: 10px;
+    padding: 20px;
+    border-radius: 24px;
+  }
+
+  .app-shell__kicker {
+    gap: 6px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    letter-spacing: 0;
+  }
+
+  .app-shell__kicker-mark {
+    width: 24px;
+    height: 24px;
+  }
+
+  .app-shell__title {
+    font-size: 1.28rem;
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+
+  .app-shell__description {
+    font-size: 0.88rem;
+    line-height: 1.6;
   }
 
   .stack-list li,
@@ -1169,9 +1256,6 @@ select {
     gap: 4px;
   }
 
-  .reading-home__header,
-  .reading-passage-card__header,
-  .note-panel__header,
   .community-panel__header,
   .community-post-card__header,
   .community-panel__meta,
@@ -1180,12 +1264,52 @@ select {
     align-items: stretch;
   }
 
+  .reading-home__header,
+  .reading-passage-card__header {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .reading-home__header > div,
+  .reading-passage-card__header h2 {
+    min-width: 0;
+  }
+
+  .reading-home__header .reading-reference-pill,
+  .reading-passage-card__header .reading-version-pill {
+    flex: 0 0 auto;
+  }
+
+  .note-panel__header {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .note-panel__header h2 {
+    font-size: 1.45rem;
+    line-height: 1.25;
+    white-space: nowrap;
+  }
+
   .note-panel__header-side {
-    justify-items: stretch;
+    width: 100%;
+    justify-items: end;
+    padding-top: 25px;
   }
 
   .note-panel__top-actions {
-    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 4px;
+  }
+
+  .note-panel__share-link {
+    min-width: 84px;
+    height: 34px;
+    padding: 0 10px;
+    font-size: 0.84rem;
   }
 
   .note-panel__format-chips {
@@ -1198,12 +1322,106 @@ select {
   }
 
   .reading-home {
+    gap: 12px;
+  }
+
+  .reading-home h2 {
+    font-size: 1.28rem;
+    line-height: 1.25;
+  }
+
+  .reading-home__summary,
+  .reading-question,
+  .reading-companion-note p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .reading-passage-card {
+    gap: 14px;
+    padding: 18px 20px 22px;
+    border-radius: 24px;
+  }
+
+  .reading-passage-card h2 {
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+
+  .reading-section-label {
+    font-size: 0.76rem;
+    letter-spacing: 0;
+  }
+
+  .reading-reference-pill,
+  .reading-version-pill {
+    min-height: 34px;
+    padding: 0 12px;
+    font-size: 0.8rem;
+  }
+
+  .reading-content-stack {
+    gap: 14px;
+  }
+
+  .reading-content-section {
+    gap: 8px;
+    padding-top: 12px;
+  }
+
+  .reading-content-section__header {
     gap: 6px;
+  }
+
+  .reading-content-section__header h3 {
+    min-height: 30px;
+    padding: 0 10px;
+    font-size: 0.92rem;
+    line-height: 1.35;
+  }
+
+  .reading-content-section__body,
+  .reading-application-list p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .reading-application-list {
+    gap: 4px;
+  }
+
+  .reading-verse-list {
+    gap: 2px;
+  }
+
+  .reading-verse {
+    font-size: 0.92rem;
+    line-height: 1.62;
+  }
+
+  .reading-verse span {
+    min-width: 24px;
+    margin-right: 8px;
+    font-size: 0.92rem;
+  }
+
+  .note-panel__footer p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .note-panel__save-button {
+    font-size: 0.95rem;
+  }
+
+  .note-editor__sheet {
+    --note-line-step: 36px;
   }
 
   .note-editor__content {
     min-height: 460px;
     padding-left: 64px;
+    font-size: 1rem;
   }
 
   .note-editor__popover {

@@ -31,10 +31,14 @@ export const ReadingHomePanel = () => {
           <p className="reading-section-label">{data.theme}</p>
           <h2>{data.title}</h2>
         </div>
-        <span className="reading-reference-pill">{data.passage.reference}</span>
+        <span className="reading-reference-pill">오늘의 본문</span>
       </div>
 
-      <ReadingPassageCard passage={data.passage} />
+      <ReadingPassageCard
+        passage={data.passage}
+        reflectionQuestion={data.reflectionQuestion}
+        applicationSteps={data.nextSteps}
+      />
     </section>
   );
 };

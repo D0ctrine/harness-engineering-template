@@ -153,7 +153,7 @@ export const preloadedReadingHome: ReadingHome = {
 export const preloadedReadingNoteWorkspace: ReadingNoteWorkspace = {
   title: "묵상 노트",
   summary: "본문을 읽는 동안 떠오른 문장과 기도를 바로 적을 수 있는 작업 공간입니다.",
-  placeholder: "오늘 읽은 말씀에서 마음에 남는 문장과 기도를 적어 보세요.",
+  placeholder: "",
   savedNote: savedReadingNote
 };
 

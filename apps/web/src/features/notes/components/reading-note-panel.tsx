@@ -16,7 +16,6 @@ export const ReadingNotePanel = () => {
   const { data, error, isLoading, isSaving, saveError, saveNote } = useReadingNoteWorkspace();
   const {
     data: reflectionData,
-    error: reflectionError,
     isLoading: isReflectionLoading
   } = useReflectionHome();
   const editorRef = useRef<RichNoteEditorHandle | null>(null);
@@ -48,7 +47,7 @@ export const ReadingNotePanel = () => {
     minute: "2-digit"
   }).format(new Date(data.savedNote.updatedAt));
   const editorPlaceholder = reflectionData
-    ? `${reflectionData.answerPlaceholder}\n\n${data.placeholder}`
+    ? [reflectionData.answerPlaceholder, data.placeholder].filter(Boolean).join("\n\n")
     : data.placeholder;
   const handleSaveClick = async () => {
     const savedNote = await saveNote(editorRef.current?.getBodyText() ?? data.savedNote.body);
@@ -67,9 +66,8 @@ export const ReadingNotePanel = () => {
         </div>
         <div className="note-panel__header-side">
           <div className="note-panel__top-actions">
-            <span className="reading-reference-pill">{data.savedNote.reference.passageReference}</span>
-            <Link className="note-panel__share-link" href="/app/share?scope=group" aria-label="나눔 보기">
-              <span aria-hidden="true">&gt;</span>
+            <Link className="note-panel__share-link" href="/app/share?scope=group">
+              나눔하기 &gt;
             </Link>
           </div>
           <div className="note-panel__format-chips" aria-live="polite">
@@ -97,18 +95,6 @@ export const ReadingNotePanel = () => {
             ) : null}
           </div>
         </div>
-      </div>
-
-      <div className="note-panel__prompt">
-        <p className="reading-section-label">묵상 질문</p>
-        {reflectionData ? (
-          <>
-            <strong>{reflectionData.question.prompt}</strong>
-            <p>아래 옥스포드 노트에 질문의 답변과 오늘의 묵상을 함께 적어 보세요.</p>
-          </>
-        ) : (
-          <p>{reflectionError?.message ?? "묵상 질문을 불러오지 못했습니다."}</p>
-        )}
       </div>
 
       <div className="note-editor note-editor--oxford">
