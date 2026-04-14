@@ -13,14 +13,11 @@ export const ReadingPassageCard = ({
 }: ReadingPassageCardProps) => {
   return (
     <article className="reading-passage-card" id="today-passage">
-      <div className="reading-passage-card__header">
-        <h2>{passage.reference}</h2>
-      </div>
-
       <div className="reading-content-stack">
         <section className="reading-content-section" aria-labelledby="reading-section-scripture">
-          <div className="reading-content-section__header">
+          <div className="reading-content-section__header reading-content-section__header--with-reference">
             <h3 id="reading-section-scripture">말씀</h3>
+            <span className="reading-content-section__reference">{passage.reference}</span>
           </div>
           <div className="reading-verse-list">
             {passage.verses.map((verse) => (
