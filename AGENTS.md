@@ -1,11 +1,13 @@
 # AGENTS.md
 
 ## Repo map
-- src/: application source when present
-- app/: application source when present
-- tests/: automated tests when present
-- docs/: architecture, plans, and review guides
+- .codex/config.toml: Codex model, approval, sandbox, and network settings
+- .devcontainer/: Node 22 Codespaces/devcontainer setup and post-create install
+- .github/workflows/ci.yml: CI install and verification workflow
+- docs/: architecture, plans, and review guides for this harness
 - scripts/verify.sh: canonical verification entrypoint
+- package.json and package-lock.json: npm project metadata and lockfile
+- src/, app/, tests/: not present yet; add only when application code or tests exist
 
 ## Commands
 - install: use the package manager already configured in this repo

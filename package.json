@@ -1,0 +1,23 @@
+{
+  "name": "harness-engineering-template",
+  "version": "1.0.0",
+  "description": "harness-engineering-template setups in projects",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"No tests configured for this harness template\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/D0ctrine/harness-engineering-template.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/D0ctrine/harness-engineering-template/issues"
+  },
+  "homepage": "https://github.com/D0ctrine/harness-engineering-template#readme"
+}
