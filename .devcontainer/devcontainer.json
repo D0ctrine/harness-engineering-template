@@ -1,0 +1,10 @@
+{
+  "name": "node-codex-harness",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+  "secrets": {
+    "OPENAI_API_KEY": {
+      "description": "OpenAI API key for Codex CLI in GitHub Codespaces"
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh"
+}
