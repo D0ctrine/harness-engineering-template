@@ -43,6 +43,8 @@ Notes:
 - `curl http://localhost:4000/api/notes/workspace`
 - `curl http://localhost:4000/api/reflection/home`
 - `curl http://localhost:4000/api/community/preview`
+- `curl http://localhost:4000/api/me -i`
+- `curl -X POST http://localhost:4000/api/meditation -H 'Content-Type: application/json' -d '{"content":"local check","date":"2026-04-14"}' -i`
 - `curl -X OPTIONS http://localhost:4000/api/health -H 'Origin: http://localhost:3000' -i`
 - `npx wrangler deploy --config apps/api/wrangler.jsonc --dry-run --outdir .wrangler-dryrun`
 
@@ -54,9 +56,11 @@ Notes:
 4. Confirm `GET /api/notes/workspace` returns the note workspace payload.
 5. Confirm `GET /api/reflection/home` returns the reflection payload.
 6. Confirm `GET /api/community/preview` returns the group preview payload.
-7. Confirm `OPTIONS /api/health` returns `204` with CORS headers.
-8. Confirm `GET /health` returns `404` because the API prefix is `/api`.
-9. Confirm the runtime path does not require Express.
+7. Confirm `GET /api/me` returns an anonymous auth payload when no session cookie exists.
+8. Confirm unauthenticated `POST /api/meditation` returns `401`.
+9. Confirm `OPTIONS /api/health` returns `204` with CORS headers.
+10. Confirm `GET /health` returns `404` because the API prefix is `/api`.
+11. Confirm the runtime path does not require Express.
 
 ## PWA Validation
 

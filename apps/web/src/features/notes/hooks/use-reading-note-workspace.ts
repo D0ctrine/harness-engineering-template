@@ -40,7 +40,19 @@ export const useReadingNoteWorkspace = () => {
     };
   }, []);
 
-  const saveNote = async (body: string) => {
+  const persistDraft = (body: string) => {
+    if (!data) {
+      return null;
+    }
+
+    const savedNote = notesService.persistMeditationDraft(data.savedNote, body);
+
+    setData((currentData) => currentData ? { ...currentData, savedNote } : currentData);
+
+    return savedNote;
+  };
+
+  const saveNote = async (body: string, options: { mode?: "draft" | "server"; date?: string } = {}) => {
     if (!data) {
       return null;
     }
@@ -49,7 +61,10 @@ export const useReadingNoteWorkspace = () => {
       setIsSaving(true);
       setSaveError(null);
 
-      const savedNote = await notesService.saveReadingNote(data.savedNote, body);
+      const savedNote =
+        options.mode === "server"
+          ? await notesService.saveReadingNoteToServer(data.savedNote, body, options.date ?? notesService.getDraftDate())
+          : await notesService.saveReadingNoteDraft(data.savedNote, body);
 
       setData((currentData) => currentData ? { ...currentData, savedNote } : currentData);
 
@@ -62,5 +77,5 @@ export const useReadingNoteWorkspace = () => {
     }
   };
 
-  return { data, error, isLoading, isSaving, saveError, saveNote };
+  return { data, error, isLoading, isSaving, saveError, persistDraft, saveNote };
 };

@@ -6,4 +6,13 @@
     "directory": "../web/public",
     "binding": "ASSETS"
   }
+  // After creating the Cloudflare D1 database, add a comma after `assets`, then:
+  // "d1_databases": [
+  //   {
+  //     "binding": "DB",
+  //     "database_name": "juyaro-bible",
+  //     "database_id": "<database-id>",
+  //     "migrations_dir": "migrations"
+  //   }
+  // ]
 }

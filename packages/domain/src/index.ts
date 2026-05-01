@@ -1,4 +1,5 @@
 export * from "./health/health-status";
+export * from "./auth/user-account";
 export * from "./community/comment";
 export * from "./community/community-preview";
 export * from "./community/group";
@@ -6,6 +7,7 @@ export * from "./community/group-membership";
 export * from "./community/post";
 export * from "./notes/reading-note";
 export * from "./notes/reading-note-workspace";
+export * from "./meditation/meditation";
 export * from "./reading/reading-home";
 export * from "./reflection/reflection-home";
 export * from "./reflection/reflection-question";

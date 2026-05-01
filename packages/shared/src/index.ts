@@ -1,4 +1,5 @@
 export * from "./types/community-preview";
+export * from "./types/auth";
 export * from "./config/env";
 export * from "./http/api-client";
 export * from "./types/health";

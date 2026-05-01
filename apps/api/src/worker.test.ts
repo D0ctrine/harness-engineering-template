@@ -69,6 +69,36 @@ test("GET /api/notes/workspace returns the note workspace payload", async () => 
   assert.equal(body.savedNote.reference.passageReference, "여호수아 1:1-8");
 });
 
+test("GET /api/me returns anonymous auth state without a session cookie", async () => {
+  const response = await handleApiRequest(
+    new Request("http://localhost:4000/api/me", { method: "GET" }),
+    bindings
+  );
+
+  const body = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(body.isAuthenticated, false);
+  assert.equal(body.requiresOnboarding, false);
+  assert.equal(body.user, null);
+});
+
+test("POST /api/meditation rejects unauthenticated saves before touching persistence", async () => {
+  const response = await handleApiRequest(
+    new Request("http://localhost:4000/api/meditation", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: "local check", date: "2026-04-14" })
+    }),
+    bindings
+  );
+
+  const body = await response.json();
+
+  assert.equal(response.status, 401);
+  assert.equal(body.message, "Authentication is required");
+});
+
 test("GET /api/reflection/home returns the reflection payload", async () => {
   const response = await handleApiRequest(
     new Request("http://localhost:4000/api/reflection/home", { method: "GET" }),

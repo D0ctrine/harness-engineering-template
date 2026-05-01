@@ -1,11 +1,14 @@
 import { getApiRuntimeConfig } from "@harness/shared";
 import type { ApiBindings } from "./config/env";
+import { authRoutes } from "./features/auth/routes";
 import { communityRoutes } from "./features/community/routes";
 import { healthRoutes } from "./features/health/routes";
+import { meditationRoutes } from "./features/meditation/routes";
 import { notesRoutes } from "./features/notes/routes";
 import { readingRoutes } from "./features/reading/routes";
 import { reflectionRoutes } from "./features/reflection/routes";
 import { scriptureRoutes } from "./features/scripture/routes";
+import { userRoutes } from "./features/user/routes";
 import { findRoute, resolveApiPath, type RouteDefinition } from "./http/router";
 import {
   createEmptyResponse,
@@ -20,12 +23,15 @@ interface WorkerExecutionContext {
 }
 
 const routes: RouteDefinition[] = [
+  ...authRoutes,
   ...healthRoutes,
   ...readingRoutes,
   ...notesRoutes,
   ...reflectionRoutes,
   ...communityRoutes,
-  ...scriptureRoutes
+  ...scriptureRoutes,
+  ...userRoutes,
+  ...meditationRoutes
 ];
 
 export const handleApiRequest = async (request: Request, bindings: ApiBindings): Promise<Response> => {

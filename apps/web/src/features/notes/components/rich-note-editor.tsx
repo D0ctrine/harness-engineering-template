@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type FormEvent,
   type KeyboardEvent
 } from "react";
 import {
@@ -35,6 +36,7 @@ interface PopoverPosition {
 interface RichNoteEditorProps {
   initialBody: string;
   placeholder: string;
+  onBodyChange?: (body: string) => void;
   onFormattingStateChange?: (state: EditorFormattingState) => void;
 }
 
@@ -55,7 +57,7 @@ const clamp = (value: number, minimum: number, maximum: number) => {
 };
 
 export const RichNoteEditor = forwardRef<RichNoteEditorHandle, RichNoteEditorProps>(
-  function RichNoteEditor({ initialBody, placeholder, onFormattingStateChange }, ref) {
+  function RichNoteEditor({ initialBody, placeholder, onBodyChange, onFormattingStateChange }, ref) {
   const layoutRef = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<HTMLDivElement | null>(null);
   const sheetRef = useRef<HTMLDivElement | null>(null);
@@ -136,11 +138,18 @@ export const RichNoteEditor = forwardRef<RichNoteEditorHandle, RichNoteEditorPro
     setPanelPosition({ top, left });
   };
 
+  const getBodyText = () => editorRef.current?.innerText ?? "";
+
+  const emitBodyChange = () => {
+    onBodyChange?.(getBodyText());
+  };
+
   const runEditorCommand = (callback: () => void) => {
     focusEditor();
     restoreEditorSelection(selectionRef.current);
     callback();
     rememberSelection();
+    emitBodyChange();
   };
 
   const closePanel = () => {
@@ -223,6 +232,7 @@ export const RichNoteEditor = forwardRef<RichNoteEditorHandle, RichNoteEditorPro
 
     focusEditor();
     moveCaretToEditorEnd();
+    emitBodyChange();
   };
 
   const clearBold = () => {
@@ -243,8 +253,6 @@ export const RichNoteEditor = forwardRef<RichNoteEditorHandle, RichNoteEditorPro
     emitFormattingState({ ...formattingStateRef.current, color: null });
   };
 
-  const getBodyText = () => editorRef.current?.innerText ?? "";
-
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "/") {
       event.preventDefault();
@@ -261,6 +269,20 @@ export const RichNoteEditor = forwardRef<RichNoteEditorHandle, RichNoteEditorPro
     if (event.key === "Escape") {
       setActivePanel("none");
     }
+  };
+
+  const handleBeforeInput = (event: FormEvent<HTMLDivElement>) => {
+    const inputEvent = event.nativeEvent as InputEvent;
+
+    if (inputEvent.data === "/") {
+      event.preventDefault();
+      openPanel("slash");
+    }
+  };
+
+  const handleInput = () => {
+    rememberSelection();
+    emitBodyChange();
   };
 
   useEffect(() => {
@@ -336,7 +358,8 @@ export const RichNoteEditor = forwardRef<RichNoteEditorHandle, RichNoteEditorPro
           suppressContentEditableWarning
           data-placeholder={placeholder}
           onClick={handleEmbeddedScriptureRemove}
-          onInput={rememberSelection}
+          onBeforeInput={handleBeforeInput}
+          onInput={handleInput}
           onKeyUp={rememberSelection}
           onMouseUp={rememberSelection}
           onFocus={rememberSelection}

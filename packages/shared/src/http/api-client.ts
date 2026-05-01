@@ -12,6 +12,7 @@ export class EnterpriseApiClient {
   async request<T>(path: string, method: HttpMethod = "GET", body?: unknown): Promise<T> {
     const response = await fetch(`${this.resolveBaseUrl()}${path}`, {
       method,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json"
       },

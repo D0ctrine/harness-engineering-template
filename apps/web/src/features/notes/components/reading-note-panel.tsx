@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { EditorFormattingState } from "../lib/editor-commands";
 import { useReadingNoteWorkspace } from "../hooks/use-reading-note-workspace";
 import { useReflectionHome } from "../../reflection/hooks/use-reflection-home";
+import { useAuth } from "../../auth/hooks/use-auth";
+import { notesService } from "../services/notes-service";
 import { RichNoteEditor, type RichNoteEditorHandle } from "./rich-note-editor";
 
 const initialFormattingState: EditorFormattingState = {
@@ -13,14 +15,45 @@ const initialFormattingState: EditorFormattingState = {
 };
 
 export const ReadingNotePanel = () => {
-  const { data, error, isLoading, isSaving, saveError, saveNote } = useReadingNoteWorkspace();
+  const { data, error, isLoading, isSaving, saveError, persistDraft, saveNote } = useReadingNoteWorkspace();
+  const auth = useAuth();
   const {
     data: reflectionData,
     isLoading: isReflectionLoading
   } = useReflectionHome();
   const editorRef = useRef<RichNoteEditorHandle | null>(null);
+  const autoSaveAttemptedRef = useRef(false);
   const [formattingState, setFormattingState] = useState(initialFormattingState);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saved">("idle");
+
+  useEffect(() => {
+    if (!data || auth.status !== "authenticated" || auth.requiresOnboarding || isSaving) {
+      return;
+    }
+
+    const draftDate = notesService.getDraftDate();
+
+    if (!notesService.hasPendingServerSave(draftDate) || autoSaveAttemptedRef.current) {
+      return;
+    }
+
+    const draft = notesService.readMeditationDraft(draftDate);
+
+    if (!draft) {
+      notesService.clearPendingServerSave(draftDate);
+      return;
+    }
+
+    autoSaveAttemptedRef.current = true;
+
+    void saveNote(draft.body, { mode: "server", date: draftDate }).then((savedNote) => {
+      if (savedNote) {
+        setSaveStatus("saved");
+      } else {
+        autoSaveAttemptedRef.current = false;
+      }
+    });
+  }, [auth.requiresOnboarding, auth.status, data, isSaving, saveNote]);
 
   if (isLoading || isReflectionLoading) {
     return (
@@ -50,7 +83,27 @@ export const ReadingNotePanel = () => {
     ? [reflectionData.answerPlaceholder, data.placeholder].filter(Boolean).join("\n\n")
     : data.placeholder;
   const handleSaveClick = async () => {
-    const savedNote = await saveNote(editorRef.current?.getBodyText() ?? data.savedNote.body);
+    const body = editorRef.current?.getBodyText() ?? data.savedNote.body;
+    const draftDate = notesService.getDraftDate();
+
+    persistDraft(body);
+
+    const refreshedAuth = auth.status === "loading" ? await auth.refreshAuth() : null;
+    const canSaveToServer =
+      (auth.status === "authenticated" && !auth.requiresOnboarding) ||
+      (refreshedAuth?.isAuthenticated === true && refreshedAuth.requiresOnboarding === false);
+
+    if (!canSaveToServer) {
+      notesService.markPendingServerSave(draftDate);
+
+      if (!auth.requiresOnboarding && refreshedAuth?.requiresOnboarding !== true) {
+        auth.openLoginModal();
+      }
+
+      return;
+    }
+
+    const savedNote = await saveNote(body, { mode: "server", date: draftDate });
 
     if (savedNote) {
       setSaveStatus("saved");
@@ -102,6 +155,7 @@ export const ReadingNotePanel = () => {
           ref={editorRef}
           initialBody={data.savedNote.body}
           placeholder={editorPlaceholder}
+          onBodyChange={persistDraft}
           onFormattingStateChange={setFormattingState}
         />
       </div>

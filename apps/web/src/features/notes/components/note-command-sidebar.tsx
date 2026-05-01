@@ -1,4 +1,19 @@
-const presetColors = ["#0f7668", "#c2410c", "#be185d", "#4338ca", "#4d7c0f"];
+import { useEffect, useState } from "react";
+
+const presetColors = [
+  "#111827",
+  "#6b7280",
+  "#dc2626",
+  "#f97316",
+  "#eab308",
+  "#16a34a",
+  "#0f766e",
+  "#0891b2",
+  "#2563eb",
+  "#7c3aed",
+  "#db2777",
+  "#be123c"
+];
 const presetEmojis = ["🙏", "✨", "📖", "🕊️", "🌿", "🔥", "🤍", "🙌", "☀️", "🌙"];
 
 interface NoteCommandSidebarProps {
@@ -18,6 +33,20 @@ export const NoteCommandSidebar = ({
   onEmojiInsert,
   onClose
 }: NoteCommandSidebarProps) => {
+  const [isCustomColorOpen, setIsCustomColorOpen] = useState(false);
+  const [pendingCustomColor, setPendingCustomColor] = useState(customColor);
+
+  useEffect(() => {
+    if (isCustomColorOpen) {
+      setPendingCustomColor(customColor);
+    }
+  }, [customColor, isCustomColorOpen]);
+
+  const handleCustomColorConfirm = () => {
+    onCustomColorChange(pendingCustomColor);
+    onColorSelect(pendingCustomColor);
+  };
+
   return (
     <aside className="note-sidebar" aria-label="노트 명령 패널">
       <div className="note-sidebar__header">
@@ -48,15 +77,48 @@ export const NoteCommandSidebar = ({
             />
           ))}
         </div>
-        <label className="note-sidebar__custom-color">
-          <span>기타</span>
-          <input
-            type="color"
-            value={customColor}
-            onChange={(event) => onCustomColorChange(event.target.value)}
-            onInput={(event) => onColorSelect((event.target as HTMLInputElement).value)}
+        <div className="note-sidebar__custom-color">
+          <button
+            className="note-sidebar__custom-color-trigger"
+            type="button"
+            onClick={() => setIsCustomColorOpen((isOpen) => !isOpen)}
+          >
+            기타
+          </button>
+          <span
+            className="note-sidebar__custom-color-preview"
+            style={{ backgroundColor: pendingCustomColor }}
+            aria-hidden="true"
           />
-        </label>
+        </div>
+        {isCustomColorOpen ? (
+          <div className="note-sidebar__custom-color-popover">
+            <label className="note-sidebar__custom-color-picker">
+              <span>직접 선택</span>
+              <input
+                type="color"
+                value={pendingCustomColor}
+                onChange={(event) => setPendingCustomColor(event.target.value)}
+              />
+            </label>
+            <div className="note-sidebar__custom-color-actions">
+              <button
+                className="note-sidebar__mini-button"
+                type="button"
+                onClick={() => setIsCustomColorOpen(false)}
+              >
+                취소
+              </button>
+              <button
+                className="note-sidebar__mini-button note-sidebar__mini-button--primary"
+                type="button"
+                onClick={handleCustomColorConfirm}
+              >
+                확인
+              </button>
+            </div>
+          </div>
+        ) : null}
       </div>
 
       <div className="note-sidebar__section">

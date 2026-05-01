@@ -12,6 +12,14 @@ export const mapApiErrorToUserMessage = (error: unknown): UserFacingError => {
     return { title: "항목을 찾을 수 없어요", message: "요청한 내용을 찾지 못했습니다." };
   }
 
+  if (typed?.status === 401) {
+    return { title: "로그인이 필요해요", message: "다시 로그인한 뒤 저장해 주세요." };
+  }
+
+  if (typed?.status === 400) {
+    return { title: "입력값을 확인해 주세요", message: "저장할 묵상 내용을 다시 확인해 주세요." };
+  }
+
   if (typed?.status && typed.status >= 500) {
     return { title: "서비스를 불러오지 못했어요", message: "잠시 후 다시 시도해 주세요." };
   }

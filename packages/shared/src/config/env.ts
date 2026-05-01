@@ -16,9 +16,21 @@ export interface ApiRuntimeConfig extends BaseRuntimeConfig {
   port: number;
   apiPrefix: string;
   corsOrigin: string;
+  webAppBaseUrl: string;
+  apiPublicBaseUrl: string;
   scriptureAssetBaseUrl: string;
   databaseUrl: string;
   jwtSecret: string;
+  oauth: {
+    google: OAuthProviderRuntimeConfig;
+    kakao: OAuthProviderRuntimeConfig;
+    naver: OAuthProviderRuntimeConfig;
+  };
+}
+
+export interface OAuthProviderRuntimeConfig {
+  clientId?: string;
+  clientSecret?: string;
 }
 
 const readString = (value: unknown): string | undefined => {
@@ -56,7 +68,23 @@ export const getApiRuntimeConfig = (env: RuntimeEnvironment): ApiRuntimeConfig =
   port: Number(optional(env.API_PORT) ?? 4000),
   apiPrefix: optional(env.API_PREFIX) ?? "/api",
   corsOrigin: optional(env.CORS_ORIGIN) ?? "http://localhost:3000",
+  webAppBaseUrl: optional(env.WEB_APP_BASE_URL) ?? optional(env.CORS_ORIGIN) ?? "http://localhost:3000",
+  apiPublicBaseUrl: optional(env.API_PUBLIC_BASE_URL) ?? `http://localhost:${optional(env.API_PORT) ?? 4000}${optional(env.API_PREFIX) ?? "/api"}`,
   scriptureAssetBaseUrl: optional(env.SCRIPTURE_ASSET_BASE_URL) ?? "http://localhost:3000/scripture",
   databaseUrl: must(env.DATABASE_URL, "DATABASE_URL"),
-  jwtSecret: must(env.JWT_SECRET, "JWT_SECRET")
+  jwtSecret: must(env.JWT_SECRET, "JWT_SECRET"),
+  oauth: {
+    google: {
+      clientId: optional(env.GOOGLE_OAUTH_CLIENT_ID),
+      clientSecret: optional(env.GOOGLE_OAUTH_CLIENT_SECRET)
+    },
+    kakao: {
+      clientId: optional(env.KAKAO_OAUTH_CLIENT_ID),
+      clientSecret: optional(env.KAKAO_OAUTH_CLIENT_SECRET)
+    },
+    naver: {
+      clientId: optional(env.NAVER_OAUTH_CLIENT_ID),
+      clientSecret: optional(env.NAVER_OAUTH_CLIENT_SECRET)
+    }
+  }
 });

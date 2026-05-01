@@ -40,10 +40,16 @@ const resolveAllowedOrigin = (request: Request, config: ApiRuntimeConfig) => {
 };
 
 const applyCorsHeaders = (headers: Headers, request: Request, config: ApiRuntimeConfig) => {
-  headers.set("Access-Control-Allow-Origin", resolveAllowedOrigin(request, config));
+  const allowedOrigin = resolveAllowedOrigin(request, config);
+
+  headers.set("Access-Control-Allow-Origin", allowedOrigin);
   headers.set("Access-Control-Allow-Methods", ACCESS_CONTROL_ALLOW_METHODS);
   headers.set("Access-Control-Allow-Headers", ACCESS_CONTROL_ALLOW_HEADERS);
   headers.set("Vary", "Origin");
+
+  if (allowedOrigin !== "*") {
+    headers.set("Access-Control-Allow-Credentials", "true");
+  }
 
   return headers;
 };

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { runtimeConfig } from "../lib/runtime-config";
+import { AuthProvider } from "../features/auth/state/auth-context";
 import { PwaProvider } from "../platform/pwa/components/pwa-provider";
 import "./globals.css";
 
@@ -46,7 +47,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="ko">
       <body className="site-body">
         <PwaProvider />
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
